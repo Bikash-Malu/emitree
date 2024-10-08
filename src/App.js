@@ -12,18 +12,15 @@ const App = () => {
   const dispatch = useDispatch();
   const game = useSelector((state) => state.game);
   const [usernameInput, setUsernameInput] = useState('');
-
-  // Store game data in the backend
   const storeUserData = async (username, points) => {
     try {
-      await axios.post('https://go-emitrr.onrender.com/api/startGame', { username, points });
+      await axios.post('http://localhost:5001/api/startGame', { username, points });
       toast.success('Game progress saved!', { autoClose: 3000 });
     } catch (error) {
-      // toast.error('Failed to save game progress!', { autoClose: 3000 });
+      console.log(error);
+      
     }
   };
-
-  // Handle starting the game
   const handleStartGame = () => {
     if (usernameInput) {
       if (game.username === usernameInput) {
@@ -32,13 +29,11 @@ const App = () => {
       }
       dispatch(setUsername(usernameInput));
       dispatch(startGame());
-      storeUserData(usernameInput, 0); // Initialize points to 0 and start the game
+      storeUserData(usernameInput, 0); 
     } else {
       toast.error('Please enter your username to start the game!', { autoClose: 3000 });
     }
   };
-
-  // Handle drawing a card
   const handleDrawCard = async () => {
     if (game.username) {
       if (game.deck.length === 0) {
@@ -47,10 +42,8 @@ const App = () => {
       }
       try {
         const response = await dispatch(drawCardFromDeck({ username: game.username, deck: game.deck }));
-
-        // Check if the response has points and store them in the backend
         if (response.payload && response.payload.points !== undefined) {
-          await storeUserData(game.username, response.payload.points); // Store updated points
+          await storeUserData(game.username, response.payload.points); 
         }
       } catch (error) {
         toast.error('Failed to draw card: ' + error.message, { autoClose: 3000 });
@@ -59,8 +52,6 @@ const App = () => {
       toast.error('Please start the game first!', { autoClose: 3000 });
     }
   };
-
-  // Handle restarting the game
   const handleRestart = () => {
     dispatch(resetGame());
     handleStartGame();
@@ -68,7 +59,7 @@ const App = () => {
 
   useEffect(() => {
     if (game.gameOver) {
-      storeUserData(game.username, game.points); // Save final game state
+      storeUserData(game.username, game.points); 
       toast.success('Game Over! Data saved successfully.', { autoClose: 3000 });
     }
   }, [game.gameOver, game.username, game.points]);

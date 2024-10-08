@@ -16,11 +16,11 @@ const Game = ({ handleDrawCard, handleRestart }) => {
 
   return (
     <Card className="max-w-xl bg-white shadow-lg rounded-lg p-6">
-      <h2 className="text-2xl font-bold text-center text-teal-600 mb-4">Welcome, {game.username}!</h2>
+      <h2 className="text-2xl font-bold text-center text-red-600 mb-4">Welcome, {game.username}!</h2>
       <p className="text-center">Points: {game.points}</p>
 
       {game.deck.length === 0 && game.gameOver ? (
-        <p className="text-center text-green-500">Congratulations, you won! No cards left to draw.</p>
+        <p className="text-center text-yellow-400">Congratulations, you won! No cards left to draw.</p>
       ) : (
         <>
           <p className="mt-4 text-center text-lg">{game.message}</p>
