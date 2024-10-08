@@ -12,14 +12,11 @@ const App = () => {
   const dispatch = useDispatch();
   const game = useSelector((state) => state.game);
   const [usernameInput, setUsernameInput] = useState('');
-
-  // Function to store user data in the database
   const storeUserData = async (username, points, gameProgress) => {
     try {
       await axios.post('https://go-emitrr.onrender.com/api/startGame', { username, points, gameProgress });
       toast.success('Game progress saved!', { autoClose: 3000 });
     } catch (error) {
-      // toast.error('Failed to save game data', { autoClose: 3000 });
     }
   };
 
@@ -33,8 +30,7 @@ const App = () => {
       }
       dispatch(setUsername(usernameInput));
       dispatch(startGame(usernameInput));
-      // Store the user data when the game starts
-      storeUserData(usernameInput, 0, {}); // Initial points and empty gameProgress
+      storeUserData(usernameInput, 0, {}); 
     } else {
       toast.error('Please enter your username to start the game!', {
         autoClose: 3000,
@@ -52,11 +48,8 @@ const App = () => {
     dispatch(resetGame());
     handleStartGame();
   };
-
-  // Check for game over and save data if necessary
   useEffect(() => {
     if (game.gameOver) {
-      // Save user data when the game is over
       storeUserData(game.username, game.points, game.gameProgress);
       toast.success('Game Over! Data saved successfully.', { autoClose: 3000 });
     }
@@ -65,7 +58,7 @@ const App = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-slate-500 to-black p-4">
       <ToastContainer />
-      <h1 className="text-4xl font-bold text-white mb-8">Exploding Kitten Game</h1>
+      <h1 className="text-4xl font-bold text-white mb-8 sm:text-2xl">Exploding Kitten Game</h1>
 
       {!game.username ? (
         <div className="mb-4 w-full max-w-md">

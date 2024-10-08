@@ -14,14 +14,12 @@ const Leaderboard = () => {
   return (
     <div className="container mx-auto p-4 mt-8">
       <h2 className="text-2xl font-bold text-center mb-4 text-white">Leaderboard</h2>
-
-      {/* Flowbite Table for Leaderboard */}
       <div className="overflow-x-auto rounded-lg shadow-lg">
         <Table hoverable={true} className="bg-gray-50">
           <Table.Head className="bg-gray-800 text-black text-center">
             <Table.HeadCell>Rank</Table.HeadCell>
             <Table.HeadCell>Username</Table.HeadCell>
-            <Table.HeadCell>Wins</Table.HeadCell>
+            <Table.HeadCell>Points</Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y divide-gray-200">
             {leaderboard.length > 0 ? (
@@ -29,7 +27,7 @@ const Leaderboard = () => {
                 <Table.Row key={index} className="hover:bg-gray-100 transition duration-200">
                   <Table.Cell className="text-center text-gray-800">{index + 1}</Table.Cell>
                   <Table.Cell className="text-center text-gray-800">{player.username}</Table.Cell>
-                  <Table.Cell className="text-center text-gray-800">{`😎👌🔥`}</Table.Cell>
+                  <Table.Cell className="text-center text-gray-800">{` 😎👌🔥`}</Table.Cell>
                 </Table.Row>
               ))
             ) : (

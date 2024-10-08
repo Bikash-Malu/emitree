@@ -71,8 +71,6 @@ export const {
   drawCard, 
   setLeaderboard 
 } = gameSlice.actions;
-
-// Async thunk for starting the game using API
 export const startGameAPI = (username) => async (dispatch) => {
   try {
     const res = await axios.post('https://go-emitrr.onrender.com/api/startGame', { username });
@@ -81,8 +79,6 @@ export const startGameAPI = (username) => async (dispatch) => {
     console.error('Error starting game:', error);
   }
 };
-
-// Async thunk for drawing a card from the deck using API
 export const drawCardFromDeckAPI = (username) => async (dispatch) => {
   try {
     const res = await axios.post('https://go-emitrr.onrender.com/api/drawCard', { username });
@@ -91,8 +87,6 @@ export const drawCardFromDeckAPI = (username) => async (dispatch) => {
     console.error('Error drawing card:', error);
   }
 };
-
-// Async thunk for fetching leaderboard
 export const fetchLeaderboard = () => async (dispatch) => {
   try {
     const response = await axios.get('https://go-emitrr.onrender.com/api/getLeaderboard');
