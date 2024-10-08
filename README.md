@@ -25,7 +25,7 @@ Before you begin, ensure you have the following installed:
    Open your terminal and run the following command to clone the repository:
 
    ```bash
-   git clone =https://github.com/Bikash-Malu/emitree.git
+   git clone https://github.com/Bikash-Malu/emitree.git
 1. **Navigate to the Project Directory**
 
    Change into the project directory:
