@@ -16,7 +16,7 @@ const App = () => {
   // Function to store user data in the database
   const storeUserData = async (username, points, gameProgress) => {
     try {
-      await axios.post('http://localhost:5001/api/startGame', { username, points, gameProgress });
+      await axios.post('https://go-emitrr.onrender.com/api/startGame', { username, points, gameProgress });
       toast.success('Game progress saved!', { autoClose: 3000 });
     } catch (error) {
       // toast.error('Failed to save game data', { autoClose: 3000 });
