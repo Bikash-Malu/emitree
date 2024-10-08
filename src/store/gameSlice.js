@@ -79,7 +79,7 @@ export const {
 } = gameSlice.actions;
 export const startGameAPI = (username) => async (dispatch) => {
   try {
-    const res = await axios.post('http://localhost:5001/api/startGame', { username });
+    const res = await axios.post('https://go-emitrr.onrender.com/api/startGame', { username });
     dispatch(setDeck(res.data));
   } catch (error) {
     console.error('Error starting game:', error);
@@ -87,7 +87,7 @@ export const startGameAPI = (username) => async (dispatch) => {
 };
 export const drawCardFromDeckAPI = (username) => async (dispatch) => {
   try {
-    const res = await axios.post('http://localhost:5001/api/drawCard', { username });
+    const res = await axios.post('https://go-emitrr.onrender.com/api/drawCard', { username });
     dispatch(drawCard(res.data));
   } catch (error) {
     console.error('Error drawing card:', error);
@@ -95,7 +95,7 @@ export const drawCardFromDeckAPI = (username) => async (dispatch) => {
 };
 export const fetchLeaderboard = () => async (dispatch) => {
   try {
-    const response = await axios.get('http://localhost:5001/api/getLeaderboard');
+    const response = await axios.get('https://go-emitrr.onrender.com/api/getLeaderboard');
     dispatch(setLeaderboard(response.data)); 
   } catch (error) {
     console.error('Error fetching leaderboard:', error);

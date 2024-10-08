@@ -14,7 +14,7 @@ const App = () => {
   const [usernameInput, setUsernameInput] = useState('');
   const storeUserData = async (username, points) => {
     try {
-      await axios.post('http://localhost:5001/api/startGame', { username, points });
+      await axios.post('https://go-emitrr.onrender.com/api/startGame', { username, points });
       toast.success('Game progress saved!', { autoClose: 3000 });
     } catch (error) {
       console.log(error);
