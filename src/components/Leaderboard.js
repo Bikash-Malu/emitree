@@ -1,15 +1,32 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchLeaderboard } from '../store/gameSlice'; // Import the action to fetch leaderboard
 import { Table } from 'flowbite-react'; // Import Table component from Flowbite
+import ClipLoader from 'react-spinners/ClipLoader'; // Import ClipLoader
 
 const Leaderboard = () => {
   const dispatch = useDispatch();
   const leaderboard = useSelector((state) => state.game.leaderboard);
+  const [loading, setLoading] = useState(true); // Initialize loading state
 
   useEffect(() => {
-    dispatch(fetchLeaderboard());
+    const loadData = async () => {
+      setLoading(true); // Set loading to true before fetching data
+      await dispatch(fetchLeaderboard());
+      setLoading(false); // Set loading to false after data is fetched
+    };
+
+    loadData();
   }, [dispatch]);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col justify-center items-center">
+        <ClipLoader size={80} color={"#3b82f6"} loading={loading} /> {/* Customize size and color */}
+        <p className="mt-2 text-white">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-4 mt-8">
