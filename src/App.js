@@ -20,7 +20,7 @@ const App = () => {
       await axios.post('https://go-emitrr.onrender.com/api/startGame', { username, points });
       toast.success('Game progress saved!', { autoClose: 3000 });
     } catch (error) {
-      toast.error('Failed to save game progress!', { autoClose: 3000 });
+      // toast.error('Failed to save game progress!', { autoClose: 3000 });
     }
   };
 
