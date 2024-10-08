@@ -2,7 +2,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const cardTypes = ['cat', 'bomb', 'defuse', 'shuffle']; // Card types
+const cardTypes = [
+  { type: 'cat', points: 1 },
+  { type: 'bomb', points: -1 },
+  { type: 'defuse', points: 2 },
+  { type: 'shuffle', points: 0 }
+]; // Card types with associated points
 
 const initialState = {
   username: '',
@@ -10,6 +15,7 @@ const initialState = {
   drawnCards: [],
   gameOver: false,
   message: '',
+  points: 0, // Initialize points
   leaderboard: [],
 };
 
@@ -27,13 +33,16 @@ export const gameSlice = createSlice({
       state.drawnCards = [];
       state.gameOver = false;
       state.message = 'Game Started! Draw a card from the deck.';
+      state.points = 0; // Reset points on start
     },
-    drawCardFromDeck: (state) => {
+    drawCardFromDeck: (state, action) => {
       if (state.deck.length > 0) {
         const drawnCard = state.deck.pop(); // Remove the top card from the deck
-        state.drawnCards.push(drawnCard);
-        state.message = `You drew a ${drawnCard} card!`;
+        state.drawnCards.push(drawnCard.type);
+        state.points += drawnCard.points; // Update points based on drawn card
+        state.message = `You drew a ${drawnCard.type} card! Points: ${state.points}`;
 
+        // Check for game over condition
         if (state.deck.length === 0) {
           state.gameOver = true;
           state.message = 'Congratulations! You drew all the cards!';
@@ -44,6 +53,7 @@ export const gameSlice = createSlice({
       state.deck = [];
       state.drawnCards = [];
       state.gameOver = false;
+      state.points = 0; // Reset points on game reset
       state.message = 'Game reset!';
     },
     setDeck: (state, action) => {
@@ -53,6 +63,7 @@ export const gameSlice = createSlice({
     },
     drawCard: (state, action) => {
       state.deck = action.payload.deck;
+      state.points = action.payload.points; // Update points from action
       state.message = action.payload.message;
       state.gameOver = action.payload.gameOver;
     },
@@ -62,6 +73,7 @@ export const gameSlice = createSlice({
   },
 });
 
+// Export actions
 export const { 
   setUsername, 
   startGame, 
@@ -71,6 +83,8 @@ export const {
   drawCard, 
   setLeaderboard 
 } = gameSlice.actions;
+
+// Start game API call
 export const startGameAPI = (username) => async (dispatch) => {
   try {
     const res = await axios.post('https://go-emitrr.onrender.com/api/startGame', { username });
@@ -79,6 +93,8 @@ export const startGameAPI = (username) => async (dispatch) => {
     console.error('Error starting game:', error);
   }
 };
+
+// Draw card API call
 export const drawCardFromDeckAPI = (username) => async (dispatch) => {
   try {
     const res = await axios.post('https://go-emitrr.onrender.com/api/drawCard', { username });
@@ -87,6 +103,8 @@ export const drawCardFromDeckAPI = (username) => async (dispatch) => {
     console.error('Error drawing card:', error);
   }
 };
+
+// Fetch leaderboard
 export const fetchLeaderboard = () => async (dispatch) => {
   try {
     const response = await axios.get('https://go-emitrr.onrender.com/api/getLeaderboard');
@@ -96,4 +114,5 @@ export const fetchLeaderboard = () => async (dispatch) => {
   }
 };
 
+// Export reducer
 export default gameSlice.reducer;

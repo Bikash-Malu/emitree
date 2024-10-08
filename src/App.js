@@ -5,7 +5,7 @@ import Game from './components/Game';
 import Leaderboard from './components/Leaderboard';
 import { Button, TextInput } from 'flowbite-react';
 import { toast, ToastContainer } from 'react-toastify';
-import axios from 'axios'; // Import axios for API requests
+import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
@@ -13,55 +13,55 @@ const App = () => {
   const game = useSelector((state) => state.game);
   const [usernameInput, setUsernameInput] = useState('');
 
-  const storeUserData = async (username, points, gameProgress) => {
+  // Store game data in the backend
+  const storeUserData = async (username, points) => {
+
     try {
-      await axios.post('https://go-emitrr.onrender.com/api/startGame', { username, points, gameProgress });
+      await axios.post('https://go-emitrr.onrender.com/api/startGame', { username, points });
       toast.success('Game progress saved!', { autoClose: 3000 });
     } catch (error) {
-      // toast.error('Failed to save game progress!', { autoClose: 3000 });
+      toast.error('Failed to save game progress!', { autoClose: 3000 });
     }
   };
 
-  const calculatePoints = (card) => {
-    switch (card) {
-      case 'bomb':
-        return -5; // Deduct points for a bomb
-      case 'defuse':
-        return 10; // Add points for a defuse card
-      case 'shuffle':
-        return 2; // Add points for a shuffle card
-      default:
-        return 0; // No points for other cards
-    }
-  };
-
+  // Handle starting the game
   const handleStartGame = () => {
     if (usernameInput) {
       if (game.username === usernameInput) {
-        toast.error('You cannot start the game with the same username!', {
-          autoClose: 3000,
-        });
+        toast.error('You cannot start the game with the same username!', { autoClose: 3000 });
         return;
       }
       dispatch(setUsername(usernameInput));
-      dispatch(startGame(usernameInput));
-      storeUserData(usernameInput, 0, {}); 
+      dispatch(startGame());
+      storeUserData(usernameInput, 0); // Initialize points to 0 and start the game
     } else {
-      toast.error('Please enter your username to start the game!', {
-        autoClose: 3000,
-      });
+      toast.error('Please enter your username to start the game!', { autoClose: 3000 });
     }
   };
 
-  const handleDrawCard = () => {
+  // Handle drawing a card
+  const handleDrawCard = async () => {
     if (game.username) {
-      const card = drawCardFromDeck(game.username);
-      const points = calculatePoints(card);
-      dispatch(drawCardFromDeck(game.username, points));
-      storeUserData(game.username, game.points + points, game.gameProgress); // Store updated points
+      if (game.deck.length === 0) {
+        toast.error('The deck is empty!', { autoClose: 3000 });
+        return;
+      }
+      try {
+        const response = await dispatch(drawCardFromDeck({ username: game.username, deck: game.deck }));
+        
+        // Check if the response has points and store them in the backend
+        if (response.payload && response.payload.points !== undefined) {
+          await storeUserData(game.username, response.payload.points); // Store updated points
+        }
+      } catch (error) {
+        toast.error('Failed to draw card: ' + error.message, { autoClose: 3000 });
+      }
+    } else {
+      toast.error('Please start the game first!', { autoClose: 3000 });
     }
   };
 
+  // Handle restarting the game
   const handleRestart = () => {
     dispatch(resetGame());
     handleStartGame();
@@ -69,10 +69,10 @@ const App = () => {
 
   useEffect(() => {
     if (game.gameOver) {
-      storeUserData(game.username, game.points, game.gameProgress);
+      storeUserData(game.username, game.points); // Save final game state
       toast.success('Game Over! Data saved successfully.', { autoClose: 3000 });
     }
-  }, [game.gameOver, game.username, game.points, game.gameProgress]);
+  }, [game.gameOver, game.username, game.points]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-slate-500 to-black p-4">
