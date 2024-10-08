@@ -8,6 +8,7 @@ const cardImages = {
   bomb: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLzjOlx9S7-Knzk6m7Msj5hDfw7lYmD_zCcJrG398rsqdrgRKYW4JBw7YRVgLBZs1v23Q&usqp=CAU',
   defuse: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7rse5HXVBN2K3tJCIpcSZv4W8jLgaEzhH7-uB0-uaKSMvuKZXVCd9_BgyvSBRwUcoVdU&usqp=CAU',
   shuffle: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXirJ3bsSuf11UIpPCbW9maasRJ6KSOMI3yoa4OPedvqkjaMCSiezqHRCsoZxJCLaAVPg&usqp=CAU',
+  cat:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuMwVWjwnNKbg6lNfwQXMB9_BJPQRkU3NyVz2Bq8tq22ZTVrH-LXoZgwFpNqFo_Ov8DDk&usqp=CAU'
 };
 
 const Game = ({ handleDrawCard, handleRestart }) => {
@@ -38,16 +39,16 @@ const Game = ({ handleDrawCard, handleRestart }) => {
                 {game.drawnCards.map((card, index) => (
                   <motion.div
                     key={index}
-                    initial={{ opacity: 0, y: -50, rotate: -20 }} // Start with opacity 0, move up, and rotate
-                    animate={{ opacity: 1, y: 0, rotate: 0 }} // Animate to full opacity, original position, and no rotation
-                    transition={{ duration: 0.6, delay: index * 0.2 }} // Staggered animations
+                    initial={{ opacity: 0, y: -50, rotate: -20 }} 
+                    animate={{ opacity: 1, y: 0, rotate: 0 }} 
+                    transition={{ duration: 0.6, delay: index * 0.2 }} 
                     className="absolute"
                     style={{
                       width: '160px',
                       height: '220px',
-                      left: `${index * 20}px`, // Offset each card slightly to the right
-                      zIndex: index + 1, // Ensure cards stack correctly
-                      top: `${-index * 20}px`, // Move each subsequent card up by 20px
+                      left: `${index * 20}px`, 
+                      zIndex: index + 1,
+                      top: `${-index * 20}px`, 
                     }}
                   >
                     <div className="p-2 border-2 border-gray-300 rounded-lg shadow-lg">
