@@ -12,11 +12,26 @@ const App = () => {
   const dispatch = useDispatch();
   const game = useSelector((state) => state.game);
   const [usernameInput, setUsernameInput] = useState('');
+
   const storeUserData = async (username, points, gameProgress) => {
     try {
       await axios.post('https://go-emitrr.onrender.com/api/startGame', { username, points, gameProgress });
       toast.success('Game progress saved!', { autoClose: 3000 });
     } catch (error) {
+      // toast.error('Failed to save game progress!', { autoClose: 3000 });
+    }
+  };
+
+  const calculatePoints = (card) => {
+    switch (card) {
+      case 'bomb':
+        return -5; // Deduct points for a bomb
+      case 'defuse':
+        return 10; // Add points for a defuse card
+      case 'shuffle':
+        return 2; // Add points for a shuffle card
+      default:
+        return 0; // No points for other cards
     }
   };
 
@@ -40,7 +55,10 @@ const App = () => {
 
   const handleDrawCard = () => {
     if (game.username) {
-      dispatch(drawCardFromDeck(game.username));
+      const card = drawCardFromDeck(game.username);
+      const points = calculatePoints(card);
+      dispatch(drawCardFromDeck(game.username, points));
+      storeUserData(game.username, game.points + points, game.gameProgress); // Store updated points
     }
   };
 
@@ -48,6 +66,7 @@ const App = () => {
     dispatch(resetGame());
     handleStartGame();
   };
+
   useEffect(() => {
     if (game.gameOver) {
       storeUserData(game.username, game.points, game.gameProgress);
@@ -58,7 +77,7 @@ const App = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-slate-500 to-black p-4">
       <ToastContainer />
-      <h1 className="text-4xl font-bold text-white mb-8 sm:text-2xl">Exploding Kitten Game</h1>
+      <h1 className="text-4xl font-bold text-white mb-8 text-center sm:text-3xl md:text-4xl">Exploding Kitten Game</h1>
 
       {!game.username ? (
         <div className="mb-4 w-full max-w-md">

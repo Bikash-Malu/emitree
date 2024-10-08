@@ -27,7 +27,7 @@ const Leaderboard = () => {
                 <Table.Row key={index} className="hover:bg-gray-100 transition duration-200">
                   <Table.Cell className="text-center text-gray-800">{index + 1}</Table.Cell>
                   <Table.Cell className="text-center text-gray-800">{player.username}</Table.Cell>
-                  <Table.Cell className="text-center text-gray-800">{` 😎👌🔥`}</Table.Cell>
+                  <Table.Cell className="text-center text-gray-800">{`${player.points} 😎👌🔥`}</Table.Cell>
                 </Table.Row>
               ))
             ) : (

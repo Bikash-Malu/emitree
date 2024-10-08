@@ -33,7 +33,7 @@ const Game = ({ handleDrawCard, handleRestart }) => {
           {/* Show drawn cards */}
           {game.drawnCards.length > 0 && (
             <div className="mt-10 mx-auto relative" style={{ height: '300px', width: '100%' }}>
-              <h3 className="text-lg font-semibold text-center">Drawn Cards:</h3>
+              <h3 className="text-lg font-semibold text-center mb-10">Drawn Cards:</h3>
               <div className="flex justify-center">
                 {game.drawnCards.map((card, index) => (
                   <motion.div
