@@ -1,12 +1,10 @@
-# Exploding Kitten Game (React)
+# Exploding Kitten Game
 
 ## Description
 
 Exploding Kitten is a fun and engaging card game where players draw cards and try to avoid the exploding kitten cards. The last player remaining in the game wins. This implementation is built using React for the frontend and connects to a Go backend.
 
 ## Features
-
-- **Multiplayer Support:** Play with multiple users.
 - **Game Logic:** Players draw cards and avoid exploding kittens.
 - **Leaderboard:** Track player scores and ranks.
 - **Responsive Design:** Works well on different screen sizes.
