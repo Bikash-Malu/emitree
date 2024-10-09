@@ -14,26 +14,44 @@ const App = () => {
   const [usernameInput, setUsernameInput] = useState('');
   const storeUserData = async (username, points) => {
     try {
-      await axios.post('https://go-emitrr.onrender.com/api/startGame', { username, points });
-      toast.success('Game progress saved!', { autoClose: 3000 });
+      // Fetch existing user data
+      const response = await axios.post('https://go-emitrr.onrender.com/api/startGame', { username, points });
+      
+      if (response.data && response.data.points !== undefined) {
+        // If user exists, update the points
+        dispatch(startGame({ points: response.data.points }));
+        toast.success('Game progress retrieved and updated!', { autoClose: 3000 });
+      } else {
+        // If new user, set points to 0
+        dispatch(startGame({ points: 0 }));
+        toast.success('New game started! Progress saved.', { autoClose: 3000 });
+      }
     } catch (error) {
       console.log(error);
-      
+      toast.error('Failed to start game or retrieve user data!', { autoClose: 3000 });
     }
   };
-  const handleStartGame = () => {
+  
+  const handleStartGame = async () => {
     if (usernameInput) {
       if (game.username === usernameInput) {
         toast.error('You cannot start the game with the same username!', { autoClose: 3000 });
         return;
       }
+      
       dispatch(setUsername(usernameInput));
-      dispatch(startGame());
-      storeUserData(usernameInput, 0); 
+      
+      try {
+        // Check if user already exists and handle appropriately
+        await storeUserData(usernameInput, 0); 
+      } catch (error) {
+        toast.error('Error starting the game', { autoClose: 3000 });
+      }
     } else {
       toast.error('Please enter your username to start the game!', { autoClose: 3000 });
     }
   };
+  
   const handleDrawCard = async () => {
     if (game.username) {
       if (game.deck.length === 0) {
